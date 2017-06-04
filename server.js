@@ -21,3 +21,7 @@ app.get('/:data', function(req,res){
 		db.close();
 	})
 })
+
+app.listen(port, function () {
+  console.log('App listening on port: ' + port)
+})
