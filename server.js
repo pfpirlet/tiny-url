@@ -5,7 +5,7 @@ const dotenv = require('dotenv').config();
 const url = process.env.MONGOLAB_URI;
 const port = process.env.PORT || 8080;
 
-app.get('/:data', function(req,res){
+app.get('/new/:data', function(req,res){
 	var data = req.params.data;
 
 	mongo.connect(url, function(err,db){
@@ -13,13 +13,16 @@ app.get('/:data', function(req,res){
 
 		var collection = db.collection("urls");
 
-		var response = collection.find({
-			original_url: data
+		var lastURL = collection.find().limit(1).sort({$natural:-1}).toArray(); // réponse asynchrone -> Console.log la lit trop vite.
+
+		console.log(lastURL);
+
+		collection.find({original_url: data}).toArray(function(err, results){ //affiche ce qui correspond à data
+			res.send(results);
 		})
 
-		console.log(response);
 		db.close();
-	})
+	});
 })
 
 app.listen(port, function () {
