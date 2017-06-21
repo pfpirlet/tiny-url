@@ -39,11 +39,21 @@ app.get("/new/:data", function(req, res) {
   });
 });
 
-app.get("/:data", function(req,res){
+app.get("/:data", function(req, res) {
   var data = req.params.data;
-
-
-})
+  if (data != "favicon.ico") {
+    console.log("DATA: " + data);
+    urlModel.findOne({ myIndex: data }, "original_url", function(err, url) {
+      if (url === null) {
+        res.send("Please use an existing short url.");
+      } else if (err) {
+        console.log(err);
+      } else {
+        res.send(url.original_url);
+      }
+    });
+  }
+});
 
 app.listen(port, function() {
   console.log("App listening on port: " + port);
