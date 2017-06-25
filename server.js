@@ -16,8 +16,8 @@ var urlSchema = new mongoose.Schema({
 });
 var urlModel = db.model("urls", urlSchema);
 
-app.get("/new/:data", function(req, res) {
-  var data = req.params.data;
+app.get("/new/:href(*)", function(req, res) {
+  var data = req.params.href
   var index = 0;
 
   urlModel.count({}, function(err, count) {
@@ -49,7 +49,12 @@ app.get("/:data", function(req, res) {
       } else if (err) {
         console.log(err);
       } else {
-        res.send(url.original_url);
+        if (/(http|https):\/\//.test(url.original_url)) {
+          res.redirect(url.original_url);
+        } else {
+          res.redirect("http://" + url.original_url);
+        }
+        
       }
     });
   }
