@@ -54,7 +54,7 @@ app.get("/:data", function(req, res) {
     console.log("DATA: " + data);
     urlModel.findOne({ myIndex: data }, "original_url", function(err, url) {
       if (url === null) {
-        res.json"Please use an existing short url.");
+        res.json("Please use an existing short url.");
       } else if (err) {
         console.log(err);
       } else {
