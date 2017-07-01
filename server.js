@@ -35,7 +35,11 @@ app.get("/new/:href(*)", function(req, res) {
           console.log(err);
         } else {
           console.log("New entry added. Data :" + data);
-          res.send(data["short_url"]);
+          var response = {
+            original_url: data["original_url"],
+            short_url: data["short_url"]
+          };
+          res.json(response);
         }
       });
     });
@@ -50,12 +54,11 @@ app.get("/:data", function(req, res) {
     console.log("DATA: " + data);
     urlModel.findOne({ myIndex: data }, "original_url", function(err, url) {
       if (url === null) {
-        res.send("Please use an existing short url.");
+        res.json"Please use an existing short url.");
       } else if (err) {
         console.log(err);
       } else {
-        
-          res.redirect(url.original_url);
+        res.redirect(url.original_url);
       }
     });
   }
